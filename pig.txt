@@ -1,0 +1,8 @@
+-- Ler arquivo csv do HDFS
+a = LOAD 'dados_atendimentos.csv' USING PigStorage(',') AS (idEntrada:int,state:chararray,usuarioOnline:int,statusSaida:chararray,paginaSaida:chararray,avaliacao:chararray,dataHoraEntrada:datetime,dataHoraSaida:datetime,dataHoraErro:datetime,tempoAcesso:int,codigo:int,erro:chararray);
+
+-- Filtrar avaliações negativas e não avaliadas
+b = FILTER a BY avaliacao == 'negativo' OR avaliacao == 'n/ avaliado';
+
+-- Salvar arquivo no HDFS
+STORE b INTO 'avaliacoes_negativas.csv' USING PigStorage(',');
